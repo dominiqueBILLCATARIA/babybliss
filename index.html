@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BabyBliss | Maman, tu as le droit de dormir</title>
 
-    <!-- DEBUT DES METAS -->
+    <!-- SEO & METAS -->
     <meta name="description" content="Marre des nuits blanches ? Découvrez BabyBliss, la méthode douce et rapide pour que votre bébé dorme enfin. Retrouvez votre sommeil, votre sérénité et votre vie de couple dès ce soir.">
     <meta name="keywords" content="sommeil bébé, calmer pleurs bébé, maman fatiguée, nuits blanches bébé, méthode babybliss, parentalité sereine">
-    
-    <!-- Open Graph (WhatsApp, Facebook, Instagram) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="BabyBliss | Maman, tu as le droit de dormir">
     <meta property="og:description" content="La méthode douce pour que bébé passe des nuits sereines sans pleurs. Déjà +1200 mamans aidées.">
     <meta property="og:image" content="https://res.cloudinary.com/dglwrrvh3/image/upload/v1767431224/ChatGPT_Image_3_janv._2026_09_51_35_svqckv.png">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/11430/11430728.png">
-    <!-- FIN DES METAS -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/14777/14777620.png">
 
     <!-- Polices -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
@@ -48,12 +43,14 @@
         }
         body { font-family: 'Outfit', sans-serif; color: var(--text-main); background: var(--day); padding-bottom: 80px; }
         
-        body.no-scroll { overflow: hidden; height: 100vh; }
+        body.no-scroll { overflow: hidden; height: 100vh; position: fixed; }
 
+        /* --- TYPO --- */
         h1, h2, h3 { font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 10px; }
         .highlight { color: var(--accent); position: relative; display: inline-block; }
         .handwritten { font-family: 'Caveat', cursive; color: var(--accent); font-size: 1.6rem; transform: rotate(-2deg); display: block; margin-bottom: 10px; }
 
+        /* --- ELEMENTS COMMUNS --- */
         .promo-bar {
             background: #EF4444; color: white; text-align: center; padding: 8px;
             font-size: 0.9rem; font-weight: 600; position: sticky; top: 0; z-index: 1000;
@@ -69,6 +66,7 @@
         }
         .cta-btn:hover { transform: scale(1.02); }
 
+        /* --- HERO --- */
         .hero {
             background: linear-gradient(180deg, var(--night) 0%, #1E293B 100%); color: white;
             padding: 100px 20px 140px; 
@@ -82,6 +80,7 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
+        /* --- PAIN & DREAM SECTIONS --- */
         .section-padding { padding: 60px 20px; max-width: 900px; margin: 0 auto; }
         
         .pain-card {
@@ -104,6 +103,7 @@
             margin: 40px 0; border-radius: 0; position: relative;
         }
 
+        /* --- SOLUTION & STACK --- */
         .method-card {
             background: white; padding: 25px; border-radius: var(--radius); margin-bottom: 15px;
             display: flex; gap: 20px; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
@@ -132,6 +132,7 @@
             100% { transform: translateY(0px) rotate(-2deg); }
         }
 
+        /* --- AVIS STYLE WHATSAPP --- */
         .whatsapp-bubble {
             background: var(--wa-bg);
             padding: 15px 20px;
@@ -159,6 +160,7 @@
             display: flex; align-items: center; justify-content: flex-end; gap: 4px;
         }
 
+        /* --- POPUP ACHAT ALEATOIRE --- */
         .sales-popup {
             position: fixed; 
             background: white; border-radius: 50px;
@@ -196,15 +198,22 @@
             .section-padding { padding: 40px 15px; }
             .popup-content { padding: 20px; width: 92%; }
             .dream-grid { grid-template-columns: 1fr; }
-            #exitPopup .popup-content { max-height: none; overflow-y: visible; }
+            
+            /* FIX POPUP CADEAU STABLE SANS SCROLL INTERNE SUR MOBILE */
+            #exitPopup .popup-content { 
+                max-height: none; 
+                overflow-y: visible; 
+            }
         }
 
+        /* --- PRIX & GARANTIE --- */
         .guarantee-box {
             border: 2px solid #CBD5E1; padding: 20px; border-radius: 15px; background: white;
             margin: 30px auto; max-width: 500px; display: flex; gap: 15px; align-items: center; text-align: left;
         }
         .payment-logos img { width: 40px; margin: 5px; transition: 0.3s; }
 
+        /* --- POPUP FORM & NOTIF --- */
         .popup-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.9); z-index: 9999; display: none;
@@ -237,6 +246,7 @@
         .toast.error { background: var(--error); }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
+        /* --- MOBILE STICKY --- */
         .sticky-mobile-cta {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; z-index: 900; display: none;
@@ -251,7 +261,7 @@
     <audio id="popupAudio"></audio>
 
     <div class="promo-bar">
-        🔥 Offre Spéciale : -80% pendant encore <span id="countdown">72:20</span> min
+        🔥 Offre Spéciale : -80% pendant encore <span id="countdown">08j 00:00:00</span>
     </div>
 
     <!-- HERO -->
@@ -611,7 +621,6 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
                 const distance = endTime - now;
                 if (distance < 0) {
                     display.textContent = "00j 00:00:00"; 
-                    if(display.nextSibling) display.nextSibling.textContent = ""; 
                     return;
                 }
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -619,9 +628,6 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
                 display.textContent = `${days}j ${hours < 10 ? '0'+hours : hours}:${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
-                if(display.nextSibling && display.nextSibling.textContent.includes('min')) {
-                    display.nextSibling.textContent = "";
-                }
             };
             setInterval(updateTimer, 1000);
             updateTimer(); 
@@ -663,15 +669,30 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
             if (e.clientY < 0) showExitPopup();
         });
 
+        // --- LOGIQUE ANTI-RETOUR MOBILE ROBUSTE (HISTORY TRAPPING) ---
         function initHistoryHack() {
-            window.history.pushState({init: true}, "");
-            window.addEventListener('popstate', function(event) {
+            // Fonction pour saturer l'historique et empêcher la sortie immédiate
+            const floodHistory = () => {
+                for (let i = 0; i < 15; i++) {
+                    window.history.pushState({ trap: i }, "", "");
+                }
+            };
+
+            // On sature l'historique dès que l'utilisateur intéragit
+            window.addEventListener('touchstart', floodHistory, { once: true });
+            window.addEventListener('click', floodHistory, { once: true });
+            window.addEventListener('scroll', floodHistory, { once: true });
+
+            // Intercepteur global
+            window.onpopstate = function(event) {
+                // Si l'utilisateur tente de sortir, on déclenche le popup
                 showExitPopup();
-                window.history.pushState({stay: true}, "");
-            });
-            const activate = () => { window.history.pushState({active: true}, ""); };
-            window.addEventListener('mousedown', activate, { once: true });
-            window.addEventListener('touchstart', activate, { once: true });
+                
+                // On ré-injecte immédiatement des états pour maintenir le piège
+                for (let i = 0; i < 5; i++) {
+                    window.history.pushState({ stay: i }, "", "");
+                }
+            };
         }
 
         function sendToWebhook() {

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BabyBliss | Maman, tu as le droit de dormir</title>
     
     <!-- Polices -->
@@ -22,12 +22,20 @@
             --error: #EF4444;
             --text-main: #334155;
             --radius: 20px;
-            --wa-bg: #E7FFDB; /* Couleur WhatsApp */
+            --wa-bg: #E7FFDB; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Outfit', sans-serif; color: var(--text-main); background: var(--day); overflow-x: hidden; padding-bottom: 80px; }
+        html, body { 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; 
+            width: 100%;
+            position: relative;
+        }
+        body { font-family: 'Outfit', sans-serif; color: var(--text-main); background: var(--day); padding-bottom: 80px; }
+        
+        /* BLOQUAGE DU SCROLL ARRIERE QUAND POPUP OUVERT */
+        body.no-scroll { overflow: hidden; height: 100vh; }
 
         /* --- TYPO --- */
         h1, h2, h3 { font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 10px; }
@@ -84,7 +92,7 @@
 
         .transition-banner {
             background: var(--night); color: white; padding: 40px 20px; text-align: center;
-            margin: 40px -20px; border-radius: 0; position: relative;
+            margin: 40px 0; border-radius: 0; position: relative;
         }
 
         /* --- SOLUTION & STACK --- */
@@ -126,7 +134,6 @@
             margin-bottom: 20px;
             max-width: 100%;
             border: 1px solid rgba(0,0,0,0.05);
-            /* AJOUT: Transition pour l'effet dynamique */
             transition: opacity 0.5s ease;
         }
         .whatsapp-bubble::before {
@@ -145,22 +152,50 @@
             display: flex; align-items: center; justify-content: flex-end; gap: 4px;
         }
 
-        /* --- POPUP ACHAT ALEATOIRE (Mobile Haut / Desktop Bas) --- */
+        /* --- POPUP ACHAT ALEATOIRE --- */
         .sales-popup {
             position: fixed; 
-            top: 70px; left: 20px; bottom: auto;
-            background: white; border-radius: 12px;
-            padding: 15px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            background: white; border-radius: 50px;
+            padding: 8px 16px; display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             z-index: 19000;
-            transform: translateX(-150%);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 320px; border-left: 5px solid var(--success);
+            opacity: 0;
+            pointer-events: none;
+            border-left: 4px solid var(--success);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .sales-popup.active { transform: translateX(0); }
+
         .sales-avatar {
-            width: 45px; height: 45px; background: #E2E8F0; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            width: 32px; height: 32px; background: #F1F5F9; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0;
+        }
+        #sales-text { font-size: 0.85rem; color: var(--night); line-height: 1.2; }
+
+        @media (min-width: 768px) {
+            .sales-popup { bottom: 30px; left: 30px; transform: translateX(-30px); }
+            .sales-popup.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+            .pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .sales-popup { 
+                top: 15px; left: 50%; 
+                transform: translateX(-50%) translateY(-20px); 
+                width: auto; max-width: 90%; 
+                white-space: nowrap;
+            }
+            .sales-popup.active { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+            .hero { padding: 80px 15px 100px; }
+            .section-padding { padding: 40px 15px; }
+            .popup-content { padding: 20px; width: 92%; }
+            .dream-grid { grid-template-columns: 1fr; }
+            
+            /* FIX POPUP CADEAU STABLE SANS SCROLL INTERNE */
+            #exitPopup .popup-content { 
+                max-height: none; 
+                overflow-y: visible; 
+            }
         }
 
         /* --- PRIX & GARANTIE --- */
@@ -181,6 +216,8 @@
             background: white; width: 100%; max-width: 420px; padding: 30px;
             border-radius: 24px; text-align: center; position: relative;
             animation: popIn 0.3s ease;
+            max-height: 85vh; 
+            overflow-y: auto;
         }
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .popup-input {
@@ -208,26 +245,13 @@
             animation: slideUp 0.4s ease;
         }
         @keyframes slideUp { from { transform: translate(-50%, 100px); } to { transform: translate(-50%, 0); } }
-
-        /* Media Queries */
-        @media (min-width: 768px) {
-            .pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-            .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-            .sales-popup { bottom: 30px; left: 30px; top: auto; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- CONTAINER NOTIFICATIONS -->
     <div id="notification-container"></div>
-    
-    <!-- AUDIO POUR LE POPUP -->
-    <audio id="popupAudio">
-        <source src="data:audio/mp3;base64,SUQzBAAAAAABAFRYWFQAAAASAAADbWFqb3JfYnJhbmQAZGFzaABUWFhUAAAAEQAAA21pbm9yX3ZlcnNpb24AMABUWFhUAAAAHAAAA2NvbXBhdGlibGVfYnJhbmRzAGlzbzZtcDQxAFRTU0UAAAAOAAADTGF2ZjU3LjU2LjEwMAAAAAAAAAAAAAAA//uQZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWgAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==" type="audio/mpeg"> 
-    </audio>
+    <audio id="popupAudio"></audio>
 
-    <!-- BANDEAU URGENCE -->
     <div class="promo-bar">
         🔥 Offre Spéciale : -80% pendant encore <span id="countdown">72:20</span> min
     </div>
@@ -331,7 +355,7 @@
             <div class="dream-card" data-aos="zoom-in" data-aos-delay="200">
                 <span class="dream-icon">✨</span>
                 <h3>Maman Rayonnante</h3>
-                <p style="font-size: 0.9rem; color: #64748B;">Fini le mode zombie et les cernes. Tu te réveilles le visage frais, prête à rire avec bébé au lieu de subir ta journée. Tu as enfin l'énergie de prendre soin de toi et de rayonner plus que jamais.</p>
+                <p style="font-size: 0.9rem; color: #64748B;">Fini le mode zombie et les cernes. Tu te réveilles le visage frais, prête à rire avec bébé au lieu de subir ta journée. Tu as enfin l'énergie de prendre soin de toi et de rayonnement plus que jamais.</p>
             </div>
 
         </div>
@@ -363,7 +387,6 @@
                 </div>
             </div>
 
-            <!-- OFFRE STACK AVEC IMAGE INTEGREE -->
             <div class="offer-stack" data-aos="zoom-in">
                 <div class="pack-in-stack">
                     <img src="https://res.cloudinary.com/dglwrrvh3/image/upload/v1767431224/ChatGPT_Image_3_janv._2026_09_51_35_svqckv.png" 
@@ -464,7 +487,6 @@
                 TÉLÉCHARGER MAINTENANT
             </button>
 
-            <!-- Logos Paiement -->
             <div class="payment-logos" style="margin-top: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/MTN_Logo.svg" alt="MTN">
                 <img src="https://play-lh.googleusercontent.com/abIwBzGTucbPNRDtFaovqR8bl39QznwWN6gCmBovKhNTLip0j6SmejSjAlTzg37BeE0" style="border-radius: 50%;" alt="Moov">
@@ -473,7 +495,6 @@
                 <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa">
             </div>
 
-            <!-- Garantie Intégrée -->
             <div class="guarantee-box">
                 <i class="fas fa-shield-alt" style="font-size: 2.5rem; color: var(--success); flex-shrink: 0;"></i>
                 <div>
@@ -499,7 +520,7 @@
         </button>
     </div>
 
-    <!-- POPUP EMAIL (ACHAT) -->
+    <!-- POPUP EMAIL -->
     <div id="emailPopup" class="popup-overlay">
         <div class="popup-content">
             <span onclick="fermerPopup('emailPopup')" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #94A3B8;">&times;</span>
@@ -523,7 +544,7 @@
         </div>
     </div>
 
-    <!-- POPUP RETENTION / CADEAU GRATUIT -->
+    <!-- POPUP RETENTION -->
     <div id="exitPopup" class="popup-overlay">
         <div class="popup-content" style="border: 4px solid var(--accent);">
             <span onclick="fermerPopup('exitPopup')" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #94A3B8;">&times;</span>
@@ -549,7 +570,6 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
         </div>
     </div>
 
-    <!-- POPUP SUCCES -->
     <div id="successPopup" class="popup-overlay">
         <div class="popup-content">
             <span onclick="fermerPopup('successPopup')" style="position: absolute; top: 15px; right: 20px; cursor: pointer;">&times;</span>
@@ -562,14 +582,13 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
         </div>
     </div>
 
-    <!-- CONTAINER POPUP VENTE (FAKE) -->
     <div id="sales-notification" class="sales-popup">
         <div class="sales-avatar">👶</div>
         <div style="text-align: left;">
-            <div style="font-size: 0.85rem; color: #64748B;">À l'instant</div>
-            <div id="sales-text" style="font-weight: 700; font-size: 0.95rem; color: var(--night);">
+            <div id="sales-text" style="font-weight: 700;">
                 Fatou D. de Dakar a commandé le pack.
             </div>
+            <div style="font-size: 0.75rem; color: #64748B;">À l'instant</div>
         </div>
     </div>
 
@@ -580,26 +599,43 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
     <script>
         AOS.init({ duration: 800, once: true });
 
-        // Compte à rebours
-        function startTimer(duration, display) {
-            var timer = duration, minutes, seconds;
-            setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-                display.textContent = minutes + ":" + seconds;
-                if (--timer < 0) timer = duration;
-            }, 1000);
+        function initSmartCountdown() {
+            const display = document.querySelector('#countdown');
+            const STORAGE_KEY = 'babybliss_offer_end';
+            const DAYS_IN_MS = 8 * 24 * 60 * 60 * 1000;
+            let endTime = localStorage.getItem(STORAGE_KEY);
+            if (!endTime) {
+                endTime = new Date().getTime() + DAYS_IN_MS;
+                localStorage.setItem(STORAGE_KEY, endTime);
+            }
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+                if (distance < 0) {
+                    display.textContent = "00j 00:00:00"; 
+                    if(display.nextSibling) display.nextSibling.textContent = ""; 
+                    return;
+                }
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                display.textContent = `${days}j ${hours < 10 ? '0'+hours : hours}:${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+                if(display.nextSibling && display.nextSibling.textContent.includes('min')) {
+                    display.nextSibling.textContent = "";
+                }
+            };
+            setInterval(updateTimer, 1000);
+            updateTimer(); 
         }
+
         window.onload = function () {
-            startTimer(60 * 15, document.querySelector('#countdown'));
+            initSmartCountdown(); 
             lancerFakePopups();
-            initDynamicReviews(); // Lancement des avis dynamiques
-            initHistoryHack(); // Active la rétention bouton retour
+            initDynamicReviews(); 
+            initHistoryHack(); 
         };
 
-        // Sticky Mobile Button
         window.onscroll = function() {
             if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
                 document.getElementById("sticky-cta").style.display = "block";
@@ -608,49 +644,52 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
             }
         };
 
-        // Gestion Popups
-        function ouvrirPopup() { document.getElementById('emailPopup').style.display = 'flex'; }
-        function fermerPopup(id) { document.getElementById(id).style.display = 'none'; }
+        function ouvrirPopup() { 
+            document.body.classList.add('no-scroll');
+            document.getElementById('emailPopup').style.display = 'flex'; 
+        }
+        function fermerPopup(id) { 
+            document.body.classList.remove('no-scroll');
+            document.getElementById(id).style.display = 'none'; 
+        }
         
-        // --- LOGIQUE RETENTION (EXIT INTENT + HISTORY HACK) ---
         let exitPopupShown = false;
-
         function showExitPopup() {
-            if (exitPopupShown) return; // Ne pas montrer 2 fois
+            if (exitPopupShown) return; 
+            document.body.classList.add('no-scroll');
             document.getElementById('exitPopup').style.display = 'flex';
             exitPopupShown = true;
         }
 
-        // 1. Detection Souris Desktop (quitte la fenêtre vers le haut)
         document.addEventListener("mouseleave", function(e) {
-            if (e.clientY < 0) {
-                showExitPopup();
-            }
+            if (e.clientY < 0) showExitPopup();
         });
 
-        // 2. Detection Mobile (Bouton Retour) - History API Hack
+        // --- INTERCEPTION DU BOUTON RETOUR (AMÉLIORÉ) ---
         function initHistoryHack() {
-            window.addEventListener('click', function() {
-                if (history.state !== 'popupState') {
-                    history.pushState('popupState', null, window.location.href);
-                }
-            }, { once: true });
+            // Création d'un état initial
+            window.history.pushState({init: true}, "");
 
             window.addEventListener('popstate', function(event) {
+                // Intercepter toute tentative de retour arrière
                 showExitPopup();
+                
+                // Forcer l'utilisateur à rester sur la page en rajoutant un état
+                window.history.pushState({stay: true}, "");
             });
+            
+            // Interaction requise pour activer certains navigateurs
+            const activate = () => { window.history.pushState({active: true}, ""); };
+            window.addEventListener('mousedown', activate, { once: true });
+            window.addEventListener('touchstart', activate, { once: true });
         }
 
-        // --- ENVOI WEBHOOK MAKE (CADEAU GRATUIT) ---
         function sendToWebhook() {
             const name = document.getElementById('leadName').value;
             const email = document.getElementById('leadEmail').value;
             const btn = document.querySelector('#exitPopup button');
-            
             btn.innerHTML = 'Envoi en cours...';
-
             const WEBHOOK_URL = "https://hook.eu1.make.com/fjyo1nmah51ejgjrcgrxy38lsouffxeg"; 
-
             fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -663,8 +702,6 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
             });
         }
 
-
-        // --- NOTIFICATIONS & FAKE SALES ---
         function afficherNotif(message, type) {
             const container = document.getElementById('notification-container');
             const toast = document.createElement('div');
@@ -675,7 +712,7 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
             setTimeout(() => {
                 toast.style.opacity = '0';
                 setTimeout(() => toast.remove(), 500);
-            }, 4000);
+            }, 3000);
         }
 
         const fakeBuyers = [
@@ -687,33 +724,26 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
             { name: "Estelle M.", city: "Brazzaville" }, { name: "Kadiatou B.", city: "Conakry" }
         ];
 
-        function playSound() {
-            var audio = new Audio('https://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3'); 
-            audio.volume = 0.5;
-            audio.play().catch(e => { if (navigator.vibrate) navigator.vibrate(200); });
-        }
-
         function afficherVenteAleatoire() {
             const buyer = fakeBuyers[Math.floor(Math.random() * fakeBuyers.length)];
             const popup = document.getElementById('sales-notification');
             const textElement = document.getElementById('sales-text');
             const counterElement = document.getElementById('live-counter');
 
-            textElement.innerHTML = `<strong>${buyer.name}</strong> de ${buyer.city}<br>vient de commander le pack.`;
-            playSound();
+            textElement.innerHTML = `<strong>${buyer.name}</strong> de ${buyer.city}<br>a commandé le pack.`;
             popup.classList.add('active');
 
             let currentCount = parseInt(counterElement.innerText);
             counterElement.innerText = currentCount + 1;
 
-            setTimeout(() => { popup.classList.remove('active'); }, 5000);
-            let randomTime = Math.floor(Math.random() * (25000 - 10000 + 1) + 10000);
+            setTimeout(() => { popup.classList.remove('active'); }, 3000); 
+            
+            let randomTime = Math.floor(Math.random() * (25000 - 15000 + 1) + 15000);
             setTimeout(afficherVenteAleatoire, randomTime);
         }
 
         function lancerFakePopups() { setTimeout(afficherVenteAleatoire, 5000); }
 
-        // --- NOUVEAU: AVIS DYNAMIQUES (Commentaires Changeants) ---
         const reviewsData = [
             { name: "Mariam F.", city: "Bamako", text: "Je ne pensais pas que ça marcherait si vite, mais 2 jours après, miracle ! 🙏", time: "11:15", day: "Auj." },
             { name: "Sarah L.", city: "Abidjan", text: "Le chapitre sur les pleurs du soir m'a sauvé la vie. Merci pour ce guide.", time: "09:30", day: "Auj." },
@@ -727,63 +757,36 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
 
         function initDynamicReviews() {
             setInterval(() => {
-                // Sélectionner une bulle au hasard parmi les 3
                 const bubbles = document.querySelectorAll('.whatsapp-bubble');
                 const randomBubbleIndex = Math.floor(Math.random() * bubbles.length);
                 const bubble = bubbles[randomBubbleIndex];
-
-                // Sélectionner un nouvel avis au hasard
                 const newReview = reviewsData[Math.floor(Math.random() * reviewsData.length)];
-
-                // Effet de transition (Fade Out -> Changement -> Fade In)
                 bubble.style.opacity = '0';
-                
                 setTimeout(() => {
-                    // Mise à jour du contenu HTML
                     bubble.querySelector('.wa-header span:first-child').innerText = `~ ${newReview.name}, ${newReview.city}`;
                     bubble.querySelector('.wa-header span:last-child').innerText = newReview.day;
                     bubble.querySelector('.wa-text').innerText = newReview.text;
                     bubble.querySelector('.wa-meta').innerHTML = `${newReview.time} <i class="fas fa-check-double" style="color: #34B7F1;"></i>`;
-                    
                     bubble.style.opacity = '1';
-                }, 500); // Attendre la fin du fade out (0.5s)
-
-            }, 6000); // Change un avis toutes les 6 secondes
+                }, 500);
+            }, 6000); 
         }
 
-
-        // --- LOGIQUE FEDAPAY COMPLETE AVEC RETENTION ---
         function lancerFedaPay() {
             var nom = document.getElementById('clientName').value;
             var email = document.getElementById('clientEmail').value;
-            
             fermerPopup('emailPopup');
-
             let widget = FedaPay.init({
                 public_key: 'pk_live_7lvC3MGGdjrdWEXaRP1Dm3QD', 
-                transaction: {
-                    amount: 100, 
-                    description: 'Pack BabyBliss'
-                },
+                transaction: { amount: 3900, description: 'Pack BabyBliss' },
                 customer: { email: email, lastname: nom, firstname: nom },
-                
                 onComplete: function(response) {
                     if (response.reason === FedaPay.DIALOG_DISMISSED) {
                         afficherNotif("⚠️ Vous venez d'annuler votre achat.", "error");
-                        setTimeout(() => {
-                            showExitPopup();
-                        }, 1000);
-                    }
-                    else if (response.transaction) {
-                         if (response.transaction.status === 'approved') {
-                            document.getElementById('successPopup').style.display = 'flex';
-                            afficherNotif("Votre paiement a bien été reçu et votre pack est déjà disponible dans votre boîte mail.", "success");
-                         } else {
-                            afficherNotif("Le paiement a échoué ou est en attente.", "error");
-                         }
-                    }
-                    else {
-                        afficherNotif("Transaction terminée.", "error");
+                        setTimeout(() => showExitPopup(), 1000);
+                    } else if (response.transaction && response.transaction.status === 'approved') {
+                        document.getElementById('successPopup').style.display = 'flex';
+                        afficherNotif("Paiement validé !", "success");
                     }
                 }
             });

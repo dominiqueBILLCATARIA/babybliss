@@ -785,7 +785,7 @@ Tu as déjà fait le premier pas 💫 Pour t’aider encore plus, voici notre To
             fermerPopup('emailPopup');
             let widget = FedaPay.init({
                 public_key: 'pk_live_7lvC3MGGdjrdWEXaRP1Dm3QD', 
-                transaction: { amount: 3900, description: 'Pack BabyBliss' },
+                transaction: { amount: 100, description: 'Pack BabyBliss' },
                 customer: { email: email, lastname: nom, firstname: nom },
                 onComplete: function(response) {
                     if (response.reason === FedaPay.DIALOG_DISMISSED) {
